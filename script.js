@@ -673,8 +673,11 @@ class BrainSignalAnalyzer {
         const width = this.signalCanvas.width;
         const height = this.signalCanvas.height;
         
-        // Clear with dark background
-        ctx.fillStyle = '#050a12';
+        // Clear with light background gradient
+        const bgGradient = ctx.createLinearGradient(0, 0, 0, height);
+        bgGradient.addColorStop(0, '#ffffff');
+        bgGradient.addColorStop(1, '#f8fafc');
+        ctx.fillStyle = bgGradient;
         ctx.fillRect(0, 0, width, height);
         
         // Draw professional grid
@@ -683,14 +686,14 @@ class BrainSignalAnalyzer {
         // Channel labels
         this.drawChannelLabels(ctx, width, height);
         
-        // Draw IR Channel (940nm) - Coral/Orange color
-        this.drawWaveform(ctx, this.channel1Buffer, width, height * 0.48, 0, '#ff6b6b', 2);
+        // Draw IR Channel (940nm) - Deep coral/salmon color for light bg
+        this.drawWaveform(ctx, this.channel1Buffer, width, height * 0.48, 0, '#e63946', 2.5);
         
-        // Draw Red Channel (660nm) - Magenta/Pink color
-        this.drawWaveform(ctx, this.channel2Buffer, width, height * 0.48, height * 0.52, '#e64980', 2);
+        // Draw Red Channel (660nm) - Deep magenta/pink for light bg
+        this.drawWaveform(ctx, this.channel2Buffer, width, height * 0.48, height * 0.52, '#d81b60', 2.5);
         
-        // Draw center separator with glow
-        ctx.strokeStyle = 'rgba(0, 150, 200, 0.4)';
+        // Draw center separator
+        ctx.strokeStyle = 'rgba(14, 165, 233, 0.25)';
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(0, height * 0.5);
@@ -700,7 +703,7 @@ class BrainSignalAnalyzer {
     
     // Draw subtle medical monitor grid
     drawGrid(ctx, width, height) {
-        ctx.strokeStyle = 'rgba(30, 60, 90, 0.4)';
+        ctx.strokeStyle = 'rgba(14, 165, 233, 0.12)';
         ctx.lineWidth = 0.5;
         
         // Vertical lines (time markers)
@@ -731,15 +734,15 @@ class BrainSignalAnalyzer {
         ctx.textBaseline = 'top';
         
         // IR Channel (940nm) - measures blood volume changes
-        ctx.fillStyle = '#ff6b6b';
+        ctx.fillStyle = '#e63946';
         ctx.fillText('IR 940nm', 8, 6);
         
         // Red Channel (660nm) - sensitive to oxygenation
-        ctx.fillStyle = '#e64980';
+        ctx.fillStyle = '#d81b60';
         ctx.fillText('Red 660nm', 8, height * 0.52 + 6);
         
         // Sensor indicator
-        ctx.fillStyle = 'rgba(150, 180, 200, 0.5)';
+        ctx.fillStyle = '#64748b';
         ctx.font = '8px Inter, Arial, sans-serif';
         ctx.textAlign = 'right';
         ctx.fillText('Pulse Oximetry', width - 8, 6);
@@ -749,7 +752,7 @@ class BrainSignalAnalyzer {
             ctx.fillStyle = '#10B981';
             ctx.fillText('● LIVE', width - 8, height - 14);
         } else {
-            ctx.fillStyle = 'rgba(150, 180, 200, 0.6)';
+            ctx.fillStyle = '#64748b';
             ctx.fillText('8s', width - 8, height - 14);
         }
     }
@@ -814,13 +817,13 @@ class BrainSignalAnalyzer {
     // Returns [activeColor, dimmedColor] based on position (0-1)
     // All ranges based on medical literature
     getSegmentColors(colorScheme, position) {
-        // Define the three zones with colors
-        const green = '#22C55E';   // Bright green - normal
-        const yellow = '#FACC15';  // Bright yellow - borderline
-        const red = '#EF4444';     // Bright red - abnormal
-        const greenDim = 'rgba(34, 197, 94, 0.25)';
-        const yellowDim = 'rgba(250, 204, 21, 0.25)';
-        const redDim = 'rgba(239, 68, 68, 0.25)';
+        // Define the three zones with colors - optimized for light background
+        const green = '#16a34a';   // Rich green - normal
+        const yellow = '#eab308';  // Golden yellow - borderline
+        const red = '#dc2626';     // Deep red - abnormal
+        const greenDim = 'rgba(22, 163, 74, 0.18)';
+        const yellowDim = 'rgba(234, 179, 8, 0.18)';
+        const redDim = 'rgba(220, 38, 38, 0.18)';
         
         // Pain (NRS 0-10): 0-3 mild (green), 4-6 moderate (yellow), 7-10 severe (red)
         if (colorScheme === 'pain') {
@@ -875,9 +878,9 @@ class BrainSignalAnalyzer {
     
     // Get the color for the current value position (for needle and value display)
     getValueColor(colorScheme, normalizedValue) {
-        const green = '#22C55E';
-        const yellow = '#FACC15';
-        const red = '#EF4444';
+        const green = '#16a34a';
+        const yellow = '#ca8a04';
+        const red = '#dc2626';
         
         // Pain (NRS 0-10)
         if (colorScheme === 'pain') {
@@ -927,7 +930,7 @@ class BrainSignalAnalyzer {
             if (normalizedValue < 0.60) return yellow; // 99.6-100.4°F
             return red;                                 // >100.4°F
         }
-        return '#FFFFFF';
+        return '#1e293b';
     }
     
     // Optimized gauge drawing - clean and efficient
@@ -944,13 +947,18 @@ class BrainSignalAnalyzer {
         const endAngle = 2.25 * Math.PI;
         const totalAngle = endAngle - startAngle;
         
-        // Background arc
+        // Background arc - light theme
         ctx.beginPath();
         ctx.arc(centerX, centerY, outerRadius, startAngle, endAngle);
         ctx.arc(centerX, centerY, innerRadius, endAngle, startAngle, true);
         ctx.closePath();
-        ctx.fillStyle = 'rgba(20, 30, 45, 0.7)';
+        ctx.fillStyle = 'rgba(241, 245, 249, 0.9)';
         ctx.fill();
+        
+        // Subtle border for the gauge track
+        ctx.strokeStyle = 'rgba(14, 165, 233, 0.15)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
         
         // Draw segments - higher resolution for better color matching
         const numSegments = 24;
@@ -978,9 +986,9 @@ class BrainSignalAnalyzer {
             ctx.fill();
         }
         
-        // Scale labels
-        ctx.fillStyle = 'rgba(140, 150, 165, 0.85)';
-        ctx.font = `500 ${w * 0.07}px Inter, sans-serif`;
+        // Scale labels - dark text for light background
+        ctx.fillStyle = '#64748b';
+        ctx.font = `600 ${w * 0.07}px Inter, sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         

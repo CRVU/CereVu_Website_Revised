@@ -545,12 +545,10 @@ body {
     position: relative;
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.05) 0%, rgba(20, 184, 166, 0.05) 100%);
+    background: transparent;
     border-radius: 24px;
-    border: 1px solid rgba(14, 165, 233, 0.2);
-    box-shadow: 
-        0 20px 60px rgba(14, 165, 233, 0.2),
-        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    border: none;
+    box-shadow: none;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -693,14 +691,14 @@ body {
 }
 
 .masimo-monitor {
-    background: linear-gradient(145deg, #050810 0%, #0a1018 50%, #080c14 100%) !important;
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%) !important;
     padding: 18px !important;
     border-radius: 20px;
-    border: 2px solid rgba(14, 165, 233, 0.4) !important;
+    border: 2px solid rgba(14, 165, 233, 0.3) !important;
     position: relative;
     max-width: 420px;
     margin: 0 auto;
-    box-shadow: 0 0 30px rgba(14, 165, 233, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(14, 165, 233, 0.1);
 }
 
 /* Monitor Logo Header */
@@ -712,8 +710,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(14, 165, 233, 0.2);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(14, 165, 233, 0.15);
 }
 
 .monitor-logo {
@@ -725,17 +723,18 @@ body {
 
 .waveform-panel {
     margin-bottom: 14px;
-    background: linear-gradient(180deg, #0a1520 0%, #0d1929 100%);
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
     border-radius: 12px;
-    padding: 8px;
-    border: 1px solid rgba(0, 150, 200, 0.3);
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+    padding: 10px;
+    border: 1px solid rgba(14, 165, 233, 0.15);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .waveform-panel .signal-canvas {
     height: 130px;
     border-radius: 8px;
-    background: #050a12;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid rgba(14, 165, 233, 0.1);
 }
 
 /* Vitals Grid - 2x2 layout like Masimo */
@@ -751,16 +750,16 @@ body {
 .vitals-grid-primary {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 16px;
     padding: 4px 8px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
 }
 
 /* Secondary Gauges Grid - All vital signs */
 .vitals-grid-secondary {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
+    gap: 8px;
     padding: 8px 4px;
 }
 
@@ -778,6 +777,7 @@ body {
     font-size: 15px;
     font-weight: 700;
     line-height: 1;
+    color: #1e293b;
 }
 
 .vital-gauge-small .vital-label {
@@ -786,6 +786,7 @@ body {
     letter-spacing: 0.2px;
     text-transform: uppercase;
     margin-top: 2px;
+    color: #64748b;
 }
 
 .vital-gauge-small .vital-value-display {
@@ -816,10 +817,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(160deg, #0c1220 0%, #060a10 100%);
+    background: linear-gradient(160deg, #ffffff 0%, #f8fafc 100%);
     border-radius: 14px;
-    border: 1px solid rgba(30, 60, 100, 0.4);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(14, 165, 233, 0.12);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .vital-gauge-canvas {
@@ -847,17 +848,18 @@ body {
 .vital-value {
     font-size: 36px;
     font-weight: 700;
-    color: #ffffff;
+    color: #1e293b;
     line-height: 1;
     margin-bottom: 4px;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     letter-spacing: -1px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .vital-label {
     font-size: 11px;
-    color: rgba(180, 190, 205, 0.95);
-    font-weight: 500;
+    color: #64748b;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -881,10 +883,12 @@ body {
     
     .vital-gauge-small .vital-value {
         font-size: 14px;
+        color: #1e293b;
     }
     
     .vital-gauge-small .vital-label {
         font-size: 6px;
+        color: #64748b;
     }
 }
 
@@ -900,10 +904,12 @@ body {
     
     .vital-gauge-small .vital-value {
         font-size: 12px;
+        color: #1e293b;
     }
     
     .vital-gauge-small .vital-label {
         font-size: 5px;
+        color: #64748b;
     }
     
     .vitals-grid-5 {
@@ -931,9 +937,9 @@ body {
 .signal-canvas {
     width: 100%;
     height: 140px;
-    background: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
     border-radius: 12px;
-    border: 1px solid rgba(14, 165, 233, 0.3);
+    border: 1px solid rgba(14, 165, 233, 0.15);
     display: block;
 }
 
@@ -3680,11 +3686,13 @@ body {
     
     .vital-value {
         font-size: 30px;
+        color: #1e293b;
     }
     
     .vital-label {
         font-size: 10px;
         letter-spacing: 0.5px;
+        color: #64748b;
     }
     
     .vital-value-display {
@@ -3705,10 +3713,12 @@ body {
     
     .vital-gauge-small .vital-value {
         font-size: 14px;
+        color: #1e293b;
     }
     
     .vital-gauge-small .vital-label {
         font-size: 6px;
+        color: #64748b;
     }
     
     .vitals-grid-5 {
@@ -3728,6 +3738,7 @@ body {
     .waveform-panel .signal-canvas {
         height: 100px;
         border-radius: 8px;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
     }
 
     .signal-canvas {
