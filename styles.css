@@ -1184,6 +1184,85 @@ body {
     margin-top: 40px;
 }
 
+/* Publications Links Section */
+.publications-links {
+    margin-top: 48px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border-color);
+}
+
+.publications-heading {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.publication-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.publication-link {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 20px 24px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.publication-link:hover {
+    background: rgba(14, 165, 233, 0.08);
+    border-color: var(--accent-primary);
+    transform: translateX(8px);
+}
+
+.publication-source {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.publication-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.5;
+    padding-right: 32px;
+}
+
+.publication-link:hover .publication-title {
+    color: var(--accent-primary);
+}
+
+.external-link-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--text-tertiary);
+    transition: all 0.3s ease;
+}
+
+.publication-link:hover .external-link-icon {
+    color: var(--accent-primary);
+    transform: translateY(-50%) translateX(4px);
+}
+
 /* Latest News Section */
 .latest-news {
     padding: var(--spacing-section) 0;
@@ -3011,6 +3090,26 @@ body {
 
     .excellence-stat {
         font-size: 40px;
+    }
+
+    .publications-links {
+        margin-top: 32px;
+        padding-top: 32px;
+    }
+
+    .publication-link {
+        padding: 16px 20px;
+    }
+
+    .publication-title {
+        font-size: 14px;
+        padding-right: 28px;
+    }
+
+    .external-link-icon {
+        right: 16px;
+        width: 16px;
+        height: 16px;
     }
 
     .news-badge {
