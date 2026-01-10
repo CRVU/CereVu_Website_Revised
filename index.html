@@ -110,19 +110,31 @@
                                 <canvas id="signalCanvas" class="signal-canvas"></canvas>
                             </div>
                             
-                            <!-- Vital Signs Gauges Grid - 5 gauges -->
-                            <div class="vitals-grid-5">
-                                <!-- rSO₂ (Regional Cerebral Oxygen Saturation) -->
-                                <div class="vital-gauge-container">
-                                    <canvas id="rso2GaugeCanvas" class="vital-gauge-canvas"></canvas>
+                            <!-- Primary Gauges - Pain & Dyspnea (Large) -->
+                            <div class="vitals-grid-primary">
+                                <!-- Pain -->
+                                <div class="vital-gauge-container vital-gauge-large">
+                                    <canvas id="painGaugeCanvas" class="vital-gauge-canvas"></canvas>
                                     <div class="vital-value-display">
-                                        <div class="vital-value rso2-value" id="rso2Value">68</div>
-                                        <div class="vital-label">rSO<sub>2</sub></div>
+                                        <div class="vital-value pain-value" id="painValue">5</div>
+                                        <div class="vital-label">Pain</div>
                                     </div>
                                 </div>
                                 
+                                <!-- Dyspnea -->
+                                <div class="vital-gauge-container vital-gauge-large">
+                                    <canvas id="dyspneaGaugeCanvas" class="vital-gauge-canvas"></canvas>
+                                    <div class="vital-value-display">
+                                        <div class="vital-value dyspnea-value" id="dyspneaValue">3</div>
+                                        <div class="vital-label">Dyspnea</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Secondary Gauges - Vital Signs (Small) -->
+                            <div class="vitals-grid-secondary">
                                 <!-- SpO₂ -->
-                                <div class="vital-gauge-container">
+                                <div class="vital-gauge-container vital-gauge-small">
                                     <canvas id="spo2GaugeCanvas" class="vital-gauge-canvas"></canvas>
                                     <div class="vital-value-display">
                                         <div class="vital-value spo2-value" id="spo2Value">97</div>
@@ -130,30 +142,21 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Heart Rate -->
-                                <div class="vital-gauge-container">
-                                    <canvas id="hrGaugeCanvas" class="vital-gauge-canvas"></canvas>
-                                    <div class="vital-value-display">
-                                        <div class="vital-value hr-value" id="hrValue">74</div>
-                                        <div class="vital-label">HR</div>
-                                    </div>
-                                </div>
-                                
                                 <!-- Respiratory Rate -->
-                                <div class="vital-gauge-container">
+                                <div class="vital-gauge-container vital-gauge-small">
                                     <canvas id="rrGaugeCanvas" class="vital-gauge-canvas"></canvas>
                                     <div class="vital-value-display">
                                         <div class="vital-value rr-value" id="rrValue">15</div>
-                                        <div class="vital-label">RR</div>
+                                        <div class="vital-label">Resp. Rate</div>
                                     </div>
                                 </div>
                                 
-                                <!-- Body Temperature -->
-                                <div class="vital-gauge-container temp-gauge-container">
-                                    <canvas id="tempGaugeCanvas" class="vital-gauge-canvas"></canvas>
+                                <!-- Heart Rate -->
+                                <div class="vital-gauge-container vital-gauge-small">
+                                    <canvas id="hrGaugeCanvas" class="vital-gauge-canvas"></canvas>
                                     <div class="vital-value-display">
-                                        <div class="vital-value temp-value" id="tempValue">36.7</div>
-                                        <div class="vital-label">Temp °C</div>
+                                        <div class="vital-value hr-value" id="hrValue">74</div>
+                                        <div class="vital-label">Heart Rate</div>
                                     </div>
                                 </div>
                             </div>

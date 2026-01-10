@@ -250,20 +250,24 @@ window.addEventListener('scroll', revealSections);
 // Professional Brain Signal Analyzer - Medical Monitor Style
 class BrainSignalAnalyzer {
     constructor() {
-        this.rso2GaugeCanvas = document.getElementById('rso2GaugeCanvas');
+        // Primary gauges - Pain & Dyspnea
+        this.painGaugeCanvas = document.getElementById('painGaugeCanvas');
+        this.dyspneaGaugeCanvas = document.getElementById('dyspneaGaugeCanvas');
+        // Secondary gauges - Vital signs
         this.spo2GaugeCanvas = document.getElementById('spo2GaugeCanvas');
         this.hrGaugeCanvas = document.getElementById('hrGaugeCanvas');
         this.rrGaugeCanvas = document.getElementById('rrGaugeCanvas');
-        this.tempGaugeCanvas = document.getElementById('tempGaugeCanvas');
         this.signalCanvas = document.getElementById('signalCanvas');
         
-        if (!this.rso2GaugeCanvas || !this.signalCanvas) return;
+        if (!this.painGaugeCanvas || !this.signalCanvas) return;
         
-        this.rso2GaugeCtx = this.rso2GaugeCanvas.getContext('2d');
+        // Primary gauge contexts
+        this.painGaugeCtx = this.painGaugeCanvas.getContext('2d');
+        this.dyspneaGaugeCtx = this.dyspneaGaugeCanvas?.getContext('2d');
+        // Secondary gauge contexts
         this.spo2GaugeCtx = this.spo2GaugeCanvas?.getContext('2d');
         this.hrGaugeCtx = this.hrGaugeCanvas?.getContext('2d');
         this.rrGaugeCtx = this.rrGaugeCanvas?.getContext('2d');
-        this.tempGaugeCtx = this.tempGaugeCanvas?.getContext('2d');
         this.signalCtx = this.signalCanvas.getContext('2d');
         
         // Set canvas sizes for all gauges
@@ -292,25 +296,25 @@ class BrainSignalAnalyzer {
         this.physioState = {
             baseHR: 72,
             baseSpo2: 97,
-            baseRso2: 68,
             baseRR: 15,
-            baseTemp: 36.7,
+            basePain: 5,
+            baseDyspnea: 3,
             targetHR: 72,
             targetSpo2: 97,
-            targetRso2: 68,
             targetRR: 15,
-            targetTemp: 36.7,
+            targetPain: 5,
+            targetDyspnea: 3,
             lastStateChange: 0,
             stateChangeDuration: 30000
         };
         
         // Vital signs for display
         this.vitals = {
-            rso2: 68,
+            pain: 5,
+            dyspnea: 3,
             spo2: 97,
             hr: 72,
-            rr: 15,
-            temp: 36.7
+            rr: 15
         };
         
         // Display values (smoothly interpolated)
@@ -351,20 +355,35 @@ class BrainSignalAnalyzer {
     }
     
     setupCanvasSizes() {
-        const gaugeSize = 160;
+        const primaryGaugeSize = 160;  // Larger for Pain & Dyspnea
+        const secondaryGaugeSize = 120; // Smaller for vital signs
         
-        const canvases = [
-            { canvas: this.rso2GaugeCanvas, ctx: this.rso2GaugeCtx },
-            { canvas: this.spo2GaugeCanvas, ctx: this.spo2GaugeCtx },
-            { canvas: this.hrGaugeCanvas, ctx: this.hrGaugeCtx },
-            { canvas: this.rrGaugeCanvas, ctx: this.rrGaugeCtx },
-            { canvas: this.tempGaugeCanvas, ctx: this.tempGaugeCtx }
+        // Primary gauges - Pain & Dyspnea (larger)
+        const primaryCanvases = [
+            { canvas: this.painGaugeCanvas, ctx: this.painGaugeCtx },
+            { canvas: this.dyspneaGaugeCanvas, ctx: this.dyspneaGaugeCtx }
         ];
         
-        canvases.forEach(({ canvas, ctx }) => {
+        primaryCanvases.forEach(({ canvas, ctx }) => {
             if (canvas && ctx) {
-                canvas.width = gaugeSize;
-                canvas.height = gaugeSize;
+                canvas.width = primaryGaugeSize;
+                canvas.height = primaryGaugeSize;
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+            }
+        });
+        
+        // Secondary gauges - Vital signs (smaller)
+        const secondaryCanvases = [
+            { canvas: this.spo2GaugeCanvas, ctx: this.spo2GaugeCtx },
+            { canvas: this.hrGaugeCanvas, ctx: this.hrGaugeCtx },
+            { canvas: this.rrGaugeCanvas, ctx: this.rrGaugeCtx }
+        ];
+        
+        secondaryCanvases.forEach(({ canvas, ctx }) => {
+            if (canvas && ctx) {
+                canvas.width = secondaryGaugeSize;
+                canvas.height = secondaryGaugeSize;
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
             }
@@ -449,14 +468,14 @@ class BrainSignalAnalyzer {
             // SpO2: Normal variation is 95-99%, rarely changes more than 1-2%
             state.targetSpo2 = 96 + Math.random() * 2; // 96-98%
             
-            // rSO2: Normal cerebral oxygenation 60-75%
-            state.targetRso2 = 65 + Math.random() * 8; // 65-73%
-            
             // RR: Normal 12-18 breaths/min
             state.targetRR = 14 + Math.random() * 3; // 14-17
             
-            // Temp: Very stable, tiny variations
-            state.targetTemp = 36.6 + Math.random() * 0.3; // 36.6-36.9
+            // Pain: Varies 3-6 for demo (moderate range)
+            state.targetPain = 4 + Math.random() * 3; // 4-7
+            
+            // Dyspnea: Varies 2-4 for demo (low-moderate)
+            state.targetDyspnea = 2 + Math.random() * 3; // 2-5
             
             // Randomize next change interval (20-40 seconds)
             state.stateChangeDuration = 20000 + Math.random() * 20000;
@@ -467,9 +486,9 @@ class BrainSignalAnalyzer {
         const slowFactor = 0.0005; // Very slow drift
         state.baseHR = this.lerp(state.baseHR, state.targetHR, slowFactor);
         state.baseSpo2 = this.lerp(state.baseSpo2, state.targetSpo2, slowFactor);
-        state.baseRso2 = this.lerp(state.baseRso2, state.targetRso2, slowFactor);
         state.baseRR = this.lerp(state.baseRR, state.targetRR, slowFactor);
-        state.baseTemp = this.lerp(state.baseTemp, state.targetTemp, slowFactor);
+        state.basePain = this.lerp(state.basePain, state.targetPain, slowFactor);
+        state.baseDyspnea = this.lerp(state.baseDyspnea, state.targetDyspnea, slowFactor);
         
         // Update beat interval based on current HR
         state.currentBeatInterval = 60000 / state.baseHR;
@@ -581,37 +600,40 @@ class BrainSignalAnalyzer {
                 state.targetSpo2 = estimatedSpO2;
             }
             
-            // rSO2 estimation (regional oxygen saturation)
-            // Derived from the overall signal amplitude ratio
-            const signalQuality = Math.min(1, irAC / 0.3);
-            state.targetRso2 = 65 + signalQuality * 10;
-            
             // Respiratory rate from signal baseline modulation
             // Count slow oscillations in baseline
             state.targetRR = 14 + Math.sin(currentTime / 5000) * 2;
+            
+            // Pain estimation - varies based on signal characteristics
+            // Using signal variability as a proxy for pain response
+            const signalVariability = Math.min(1, irAC / 0.25);
+            state.targetPain = 4 + signalVariability * 3 + Math.sin(currentTime / 8000) * 1.5;
+            
+            // Dyspnea estimation - correlated with respiratory patterns
+            state.targetDyspnea = 2 + Math.sin(currentTime / 6000) * 2;
         }
         
         // Slowly interpolate base values toward targets
         const slowFactor = 0.003;
         state.baseHR = this.lerp(state.baseHR, state.targetHR, slowFactor);
         state.baseSpo2 = this.lerp(state.baseSpo2, state.targetSpo2, slowFactor);
-        state.baseRso2 = this.lerp(state.baseRso2, state.targetRso2, slowFactor);
         state.baseRR = this.lerp(state.baseRR, state.targetRR, slowFactor);
-        state.baseTemp = this.lerp(state.baseTemp, state.targetTemp, slowFactor);
+        state.basePain = this.lerp(state.basePain, state.targetPain, slowFactor);
+        state.baseDyspnea = this.lerp(state.baseDyspnea, state.targetDyspnea, slowFactor);
         
         // Set vitals with minimal noise for display
         this.vitals.hr = state.baseHR + (Math.random() - 0.5) * 0.3;
         this.vitals.spo2 = state.baseSpo2 + (Math.random() - 0.5) * 0.2;
-        this.vitals.rso2 = state.baseRso2 + (Math.random() - 0.5) * 0.3;
         this.vitals.rr = state.baseRR + (Math.random() - 0.5) * 0.2;
-        this.vitals.temp = state.baseTemp;
+        this.vitals.pain = state.basePain + (Math.random() - 0.5) * 0.3;
+        this.vitals.dyspnea = state.baseDyspnea + (Math.random() - 0.5) * 0.2;
         
         // Clamp to physiological ranges
         this.vitals.hr = Math.max(60, Math.min(100, this.vitals.hr));
         this.vitals.spo2 = Math.max(94, Math.min(99, this.vitals.spo2));
-        this.vitals.rso2 = Math.max(55, Math.min(80, this.vitals.rso2));
         this.vitals.rr = Math.max(12, Math.min(20, this.vitals.rr));
-        this.vitals.temp = Math.max(36.4, Math.min(37.2, this.vitals.temp));
+        this.vitals.pain = Math.max(0, Math.min(10, this.vitals.pain));
+        this.vitals.dyspnea = Math.max(0, Math.min(10, this.vitals.dyspnea));
     }
     
     // Draw professional medical monitor display
@@ -737,103 +759,97 @@ class BrainSignalAnalyzer {
     
     // Clamp vitals to physiological ranges
     clampVitals() {
-        this.vitals.rso2 = Math.max(55, Math.min(80, this.vitals.rso2));
+        this.vitals.pain = Math.max(0, Math.min(10, this.vitals.pain));
+        this.vitals.dyspnea = Math.max(0, Math.min(10, this.vitals.dyspnea));
         this.vitals.spo2 = Math.max(94, Math.min(100, this.vitals.spo2));
         this.vitals.hr = Math.max(55, Math.min(120, this.vitals.hr));
         this.vitals.rr = Math.max(10, Math.min(26, this.vitals.rr));
-        this.vitals.temp = Math.max(36.2, Math.min(37.5, this.vitals.temp));
     }
     
     // Smoothly update display values
     updateDisplayValues() {
-        this.displayVitals.rso2 = this.lerp(this.displayVitals.rso2, this.vitals.rso2, this.smoothing);
+        this.displayVitals.pain = this.lerp(this.displayVitals.pain, this.vitals.pain, this.smoothing);
+        this.displayVitals.dyspnea = this.lerp(this.displayVitals.dyspnea, this.vitals.dyspnea, this.smoothing);
         this.displayVitals.spo2 = this.lerp(this.displayVitals.spo2, this.vitals.spo2, this.smoothing);
         this.displayVitals.hr = this.lerp(this.displayVitals.hr, this.vitals.hr, this.smoothing);
         this.displayVitals.rr = this.lerp(this.displayVitals.rr, this.vitals.rr, this.smoothing);
-        this.displayVitals.temp = this.lerp(this.displayVitals.temp, this.vitals.temp, this.smoothing);
     }
     
-    // Pre-computed color schemes for performance
+    // 3-color scheme: Green (low/good), Yellow (medium), Red (high/severe)
+    // Returns [activeColor, dimmedColor] based on position (0-1)
     getSegmentColors(colorScheme, position) {
-        // Returns [color, activeColor] based on position (0-1)
-        // rSO2: 0-100% -> <50 red, 50-60 orange, 60-80 green, >80 cyan
-        if (colorScheme === 'rso2') {
-            if (position < 0.5) return ['#EF4444', '#FF6B6B'];
-            if (position < 0.6) return ['#F97316', '#FB923C'];
-            if (position < 0.8) return ['#10B981', '#34D399'];
-            return ['#38BDF8', '#7DD3FC'];
+        // Define the three zones with colors
+        const green = '#22C55E';   // Bright green
+        const yellow = '#FACC15';  // Bright yellow  
+        const red = '#EF4444';     // Bright red
+        const greenDim = 'rgba(34, 197, 94, 0.25)';
+        const yellowDim = 'rgba(250, 204, 21, 0.25)';
+        const redDim = 'rgba(239, 68, 68, 0.25)';
+        
+        // Pain & Dyspnea: 0-10 scale, 0-3 green, 4-6 yellow, 7-10 red
+        if (colorScheme === 'pain' || colorScheme === 'dyspnea') {
+            if (position < 0.35) return [green, greenDim];
+            if (position < 0.65) return [yellow, yellowDim];
+            return [red, redDim];
         }
-        // SpO2: 0-100% -> <90 red, 90-95 orange, >95 green
+        // SpO2: 0-100% -> >95 green, 90-95 yellow, <90 red
         if (colorScheme === 'spo2') {
-            if (position < 0.9) return ['#EF4444', '#FF6B6B'];
-            if (position < 0.95) return ['#F97316', '#FB923C'];
-            return ['#10B981', '#34D399'];
+            if (position < 0.9) return [red, redDim];
+            if (position < 0.95) return [yellow, yellowDim];
+            return [green, greenDim];
         }
-        // HR: 0-220 -> <40 blue, 40-60 yellow, 60-100 green, 100-150 orange, >150 red
+        // HR: 0-220 -> 60-100 green, 40-60 & 100-140 yellow, <40 & >140 red
         if (colorScheme === 'hr') {
-            if (position < 0.18) return ['#3B82F6', '#60A5FA'];
-            if (position < 0.27) return ['#F59E0B', '#FBBF24'];
-            if (position < 0.45) return ['#10B981', '#34D399'];
-            if (position < 0.68) return ['#F97316', '#FB923C'];
-            return ['#EF4444', '#FF6B6B'];
+            if (position < 0.18) return [red, redDim];      // <40
+            if (position < 0.27) return [yellow, yellowDim]; // 40-60
+            if (position < 0.45) return [green, greenDim];   // 60-100
+            if (position < 0.64) return [yellow, yellowDim]; // 100-140
+            return [red, redDim];                             // >140
         }
-        // RR: 0-60 -> <8 blue, 8-12 yellow, 12-20 green, 20-30 orange, >30 red
+        // RR: 0-60 -> 12-20 green, 8-12 & 20-30 yellow, <8 & >30 red
         if (colorScheme === 'rr') {
-            if (position < 0.13) return ['#3B82F6', '#60A5FA'];
-            if (position < 0.2) return ['#F59E0B', '#FBBF24'];
-            if (position < 0.33) return ['#10B981', '#34D399'];
-            if (position < 0.5) return ['#F97316', '#FB923C'];
-            return ['#EF4444', '#FF6B6B'];
+            if (position < 0.13) return [red, redDim];       // <8
+            if (position < 0.2) return [yellow, yellowDim];  // 8-12
+            if (position < 0.33) return [green, greenDim];   // 12-20
+            if (position < 0.5) return [yellow, yellowDim];  // 20-30
+            return [red, redDim];                             // >30
         }
-        // Temp: 28-42°C -> <35 blue, 35-36.5 light blue, 36.5-37.5 green, 37.5-39 orange, >39 red
-        if (colorScheme === 'temp') {
-            if (position < 0.5) return ['#3B82F6', '#60A5FA'];
-            if (position < 0.6) return ['#60A5FA', '#93C5FD'];
-            if (position < 0.68) return ['#10B981', '#34D399'];
-            if (position < 0.79) return ['#F97316', '#FB923C'];
-            return ['#EF4444', '#FF6B6B'];
-        }
-        return ['#10B981', '#34D399'];
+        return [green, greenDim];
     }
     
-    // Get the color for the current value position
+    // Get the color for the current value position (for needle and value display)
     getValueColor(colorScheme, normalizedValue) {
-        // rSO2: 0-100% -> <50 critical, 50-60 low, 60-80 normal, >80 excellent
-        if (colorScheme === 'rso2') {
-            if (normalizedValue < 0.5) return '#EF4444';   // <50%
-            if (normalizedValue < 0.6) return '#F97316';   // 50-60%
-            if (normalizedValue < 0.8) return '#10B981';   // 60-80%
-            return '#38BDF8';                               // >80%
+        const green = '#22C55E';
+        const yellow = '#FACC15';
+        const red = '#EF4444';
+        
+        // Pain & Dyspnea: 0-10 scale
+        if (colorScheme === 'pain' || colorScheme === 'dyspnea') {
+            if (normalizedValue < 0.35) return green;  // 0-3
+            if (normalizedValue < 0.65) return yellow; // 4-6
+            return red;                                 // 7-10
         }
-        // SpO2: 0-100% -> <90 critical, 90-95 low, 95-100 normal
+        // SpO2: 0-100%
         if (colorScheme === 'spo2') {
-            if (normalizedValue < 0.9) return '#EF4444';   // <90%
-            if (normalizedValue < 0.95) return '#F97316';  // 90-95%
-            return '#10B981';                              // >95%
+            if (normalizedValue < 0.9) return red;     // <90%
+            if (normalizedValue < 0.95) return yellow; // 90-95%
+            return green;                               // >95%
         }
-        // HR: 0-220 -> <40 critical, 40-60 low, 60-100 normal, 100-150 elevated, >150 critical
+        // HR: 0-220
         if (colorScheme === 'hr') {
-            if (normalizedValue < 0.18) return '#3B82F6';  // <40 (bradycardia)
-            if (normalizedValue < 0.27) return '#F59E0B';  // 40-60
-            if (normalizedValue < 0.45) return '#10B981';  // 60-100
-            if (normalizedValue < 0.68) return '#F97316';  // 100-150
-            return '#EF4444';                              // >150
+            if (normalizedValue < 0.18) return red;    // <40
+            if (normalizedValue < 0.27) return yellow; // 40-60
+            if (normalizedValue < 0.45) return green;  // 60-100
+            if (normalizedValue < 0.64) return yellow; // 100-140
+            return red;                                 // >140
         }
-        // RR: 0-60 -> <8 low, 8-12 borderline, 12-20 normal, 20-30 elevated, >30 critical
+        // RR: 0-60
         if (colorScheme === 'rr') {
-            if (normalizedValue < 0.13) return '#3B82F6';  // <8
-            if (normalizedValue < 0.2) return '#F59E0B';   // 8-12
-            if (normalizedValue < 0.33) return '#10B981';  // 12-20
-            if (normalizedValue < 0.5) return '#F97316';   // 20-30
-            return '#EF4444';                              // >30
-        }
-        // Temp: 28-42°C -> <35 hypothermia, 35-36.5 cool, 36.5-37.5 normal, 37.5-39 fever, >39 high
-        if (colorScheme === 'temp') {
-            if (normalizedValue < 0.5) return '#3B82F6';   // <35°C
-            if (normalizedValue < 0.6) return '#60A5FA';   // 35-36.5°C
-            if (normalizedValue < 0.68) return '#10B981';  // 36.5-37.5°C
-            if (normalizedValue < 0.79) return '#F97316';  // 37.5-39°C
-            return '#EF4444';                              // >39°C
+            if (normalizedValue < 0.13) return red;    // <8
+            if (normalizedValue < 0.2) return yellow;  // 8-12
+            if (normalizedValue < 0.33) return green;  // 12-20
+            if (normalizedValue < 0.5) return yellow;  // 20-30
+            return red;                                 // >30
         }
         return '#FFFFFF';
     }
@@ -874,18 +890,15 @@ class BrainSignalAnalyzer {
             const position = i / numSegments; // Position from 0 to ~1
             const isActive = i <= valuePosition;
             
-            const [baseColor] = this.getSegmentColors(colorScheme, position);
+            const [activeColor, dimmedColor] = this.getSegmentColors(colorScheme, position);
             
             ctx.beginPath();
             ctx.arc(centerX, centerY, outerRadius, segStart, segEnd);
             ctx.arc(centerX, centerY, innerRadius, segEnd, segStart, true);
             ctx.closePath();
             
-            if (isActive) {
-                ctx.fillStyle = baseColor;
-            } else {
-                ctx.fillStyle = 'rgba(40, 50, 70, 0.5)';
-            }
+            // Use active color if lit up, dimmed version of same color if not
+            ctx.fillStyle = isActive ? activeColor : dimmedColor;
             ctx.fill();
         }
         
@@ -948,25 +961,29 @@ class BrainSignalAnalyzer {
     
     // Draw all gauges with smoothed values
     drawAllGauges() {
-        // rSO2 gauge (0-100%) - Regional cerebral oxygen saturation
+        // PRIMARY GAUGES (Large)
+        
+        // Pain gauge (0-10 scale)
         this.drawMasimoGauge(
-            this.rso2GaugeCtx, this.rso2GaugeCanvas,
-            this.displayVitals.rso2, 0, 100, 'rso2', '0', '100'
+            this.painGaugeCtx, this.painGaugeCanvas,
+            this.displayVitals.pain, 0, 10, 'pain', '0', '10'
         );
+        
+        // Dyspnea gauge (0-10 scale)
+        if (this.dyspneaGaugeCtx) {
+            this.drawMasimoGauge(
+                this.dyspneaGaugeCtx, this.dyspneaGaugeCanvas,
+                this.displayVitals.dyspnea, 0, 10, 'dyspnea', '0', '10'
+            );
+        }
+        
+        // SECONDARY GAUGES (Small)
         
         // SpO2 gauge (0-100%) - Peripheral oxygen saturation
         if (this.spo2GaugeCtx) {
             this.drawMasimoGauge(
                 this.spo2GaugeCtx, this.spo2GaugeCanvas,
                 this.displayVitals.spo2, 0, 100, 'spo2', '0', '100'
-            );
-        }
-        
-        // Heart Rate gauge (0-220 bpm) - Max theoretical HR
-        if (this.hrGaugeCtx) {
-            this.drawMasimoGauge(
-                this.hrGaugeCtx, this.hrGaugeCanvas,
-                this.displayVitals.hr, 0, 220, 'hr', '0', '220'
             );
         }
         
@@ -978,11 +995,11 @@ class BrainSignalAnalyzer {
             );
         }
         
-        // Temperature gauge (28-42 °C) - Survivable range
-        if (this.tempGaugeCtx) {
+        // Heart Rate gauge (0-220 bpm)
+        if (this.hrGaugeCtx) {
             this.drawMasimoGauge(
-                this.tempGaugeCtx, this.tempGaugeCanvas,
-                this.displayVitals.temp, 28, 42, 'temp', '28', '42'
+                this.hrGaugeCtx, this.hrGaugeCanvas,
+                this.displayVitals.hr, 0, 220, 'hr', '0', '220'
             );
         }
     }
@@ -990,18 +1007,26 @@ class BrainSignalAnalyzer {
     
     // Update metrics with smoothed display values
     updateMetrics() {
-        const rso2 = this.displayVitals.rso2;
+        const pain = this.displayVitals.pain;
+        const dyspnea = this.displayVitals.dyspnea;
         const spo2 = this.displayVitals.spo2;
         const hr = this.displayVitals.hr;
         const rr = this.displayVitals.rr;
-        const temp = this.displayVitals.temp;
         
-        // Update rSO2 value display - color matches gauge segment
-        const rso2El = document.getElementById('rso2Value');
-        if (rso2El) {
-            rso2El.textContent = Math.round(rso2);
-            const normalizedRso2 = rso2 / 100;
-            rso2El.style.color = this.getValueColor('rso2', normalizedRso2);
+        // Update Pain value display - color matches gauge segment
+        const painEl = document.getElementById('painValue');
+        if (painEl) {
+            painEl.textContent = Math.round(pain);
+            const normalizedPain = pain / 10;
+            painEl.style.color = this.getValueColor('pain', normalizedPain);
+        }
+        
+        // Update Dyspnea value display - color matches gauge segment
+        const dyspneaEl = document.getElementById('dyspneaValue');
+        if (dyspneaEl) {
+            dyspneaEl.textContent = Math.round(dyspnea);
+            const normalizedDyspnea = dyspnea / 10;
+            dyspneaEl.style.color = this.getValueColor('dyspnea', normalizedDyspnea);
         }
         
         // Update SpO2 - color matches gauge segment
@@ -1012,14 +1037,6 @@ class BrainSignalAnalyzer {
             spo2El.style.color = this.getValueColor('spo2', normalizedSpo2);
         }
         
-        // Update Heart Rate - color matches gauge segment
-        const hrEl = document.getElementById('hrValue');
-        if (hrEl) {
-            hrEl.textContent = Math.round(hr);
-            const normalizedHr = hr / 220;
-            hrEl.style.color = this.getValueColor('hr', normalizedHr);
-        }
-        
         // Update Respiratory Rate - color matches gauge segment
         const rrEl = document.getElementById('rrValue');
         if (rrEl) {
@@ -1028,12 +1045,12 @@ class BrainSignalAnalyzer {
             rrEl.style.color = this.getValueColor('rr', normalizedRr);
         }
         
-        // Update Body Temperature - color matches gauge segment
-        const tempEl = document.getElementById('tempValue');
-        if (tempEl) {
-            tempEl.textContent = temp.toFixed(1);
-            const normalizedTemp = (temp - 28) / (42 - 28);
-            tempEl.style.color = this.getValueColor('temp', normalizedTemp);
+        // Update Heart Rate - color matches gauge segment
+        const hrEl = document.getElementById('hrValue');
+        if (hrEl) {
+            hrEl.textContent = Math.round(hr);
+            const normalizedHr = hr / 220;
+            hrEl.style.color = this.getValueColor('hr', normalizedHr);
         }
     }
     

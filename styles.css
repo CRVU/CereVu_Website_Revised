@@ -747,7 +747,42 @@ body {
     padding: 0 4px;
 }
 
-/* Vitals Grid - 5 gauges (2+2+1 layout) */
+/* Primary Gauges Grid - Pain & Dyspnea (Large) */
+.vitals-grid-primary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 0 4px;
+    margin-bottom: 12px;
+}
+
+/* Secondary Gauges Grid - SpO2, RR, HR (Small) */
+.vitals-grid-secondary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 0 4px;
+}
+
+/* Large gauge for Pain & Dyspnea */
+.vital-gauge-large {
+    aspect-ratio: 1;
+}
+
+/* Small gauge for vital signs */
+.vital-gauge-small {
+    aspect-ratio: 1;
+}
+
+.vital-gauge-small .vital-value {
+    font-size: 24px;
+}
+
+.vital-gauge-small .vital-label {
+    font-size: 9px;
+}
+
+/* Vitals Grid - 5 gauges (2+2+1 layout) - Legacy */
 .vitals-grid-5 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -824,8 +859,24 @@ body {
     transition: color 0.3s ease;
 }
 
-/* 5-gauge grid responsive */
+/* Gauge grid responsive */
 @media (max-width: 480px) {
+    .vitals-grid-primary {
+        gap: 10px;
+    }
+    
+    .vitals-grid-secondary {
+        gap: 6px;
+    }
+    
+    .vital-gauge-small .vital-value {
+        font-size: 20px;
+    }
+    
+    .vital-gauge-small .vital-label {
+        font-size: 8px;
+    }
+    
     .vitals-grid-5 {
         gap: 8px;
     }
@@ -3613,6 +3664,14 @@ body {
     
     .vital-gauge-container {
         border-radius: 12px;
+    }
+    
+    .vitals-grid-primary {
+        gap: 8px;
+    }
+    
+    .vitals-grid-secondary {
+        gap: 6px;
     }
     
     .vitals-grid-5 {
