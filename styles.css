@@ -537,7 +537,7 @@ body {
 .device-mockup {
     position: relative;
     width: 100%;
-    max-width: 400px;
+    max-width: 580px;
 }
 
 
@@ -751,17 +751,17 @@ body {
 .vitals-grid-primary {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    padding: 0 4px;
-    margin-bottom: 12px;
+    gap: 20px;
+    padding: 4px 8px;
+    margin-bottom: 16px;
 }
 
-/* Secondary Gauges Grid - SpO2, RR, HR (Small) */
+/* Secondary Gauges Grid - All vital signs */
 .vitals-grid-secondary {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 10px;
-    padding: 0 4px;
+    padding: 8px 4px;
 }
 
 /* Large gauge for Pain & Dyspnea */
@@ -775,11 +775,24 @@ body {
 }
 
 .vital-gauge-small .vital-value {
-    font-size: 24px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
 }
 
 .vital-gauge-small .vital-label {
-    font-size: 9px;
+    font-size: 7px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+.vital-gauge-small .vital-value-display {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important;
 }
 
 /* Vitals Grid - 5 gauges (2+2+1 layout) - Legacy */
@@ -860,21 +873,37 @@ body {
 }
 
 /* Gauge grid responsive */
+@media (max-width: 600px) {
+    .vitals-grid-secondary {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+    
+    .vital-gauge-small .vital-value {
+        font-size: 14px;
+    }
+    
+    .vital-gauge-small .vital-label {
+        font-size: 6px;
+    }
+}
+
 @media (max-width: 480px) {
     .vitals-grid-primary {
         gap: 10px;
     }
     
     .vitals-grid-secondary {
-        gap: 6px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
     }
     
     .vital-gauge-small .vital-value {
-        font-size: 20px;
+        font-size: 12px;
     }
     
     .vital-gauge-small .vital-label {
-        font-size: 8px;
+        font-size: 5px;
     }
     
     .vitals-grid-5 {
@@ -3092,7 +3121,7 @@ body {
     }
 
     .device-mockup {
-        max-width: 350px;
+        max-width: 520px;
     }
 
     .about-content {
@@ -3356,7 +3385,7 @@ body {
     }
 
     .device-mockup {
-        max-width: 300px;
+        max-width: 360px;
     }
     
     .btn {
@@ -3667,11 +3696,19 @@ body {
     }
     
     .vitals-grid-primary {
-        gap: 8px;
+        gap: 12px;
     }
     
     .vitals-grid-secondary {
-        gap: 6px;
+        gap: 8px;
+    }
+    
+    .vital-gauge-small .vital-value {
+        font-size: 14px;
+    }
+    
+    .vital-gauge-small .vital-label {
+        font-size: 6px;
     }
     
     .vitals-grid-5 {
