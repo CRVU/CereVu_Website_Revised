@@ -1310,6 +1310,13 @@ function initializeTabs() {
 // Initialize tabs when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     initializeTabs();
+    
+    // Set current year in footer
+    const yearElements = document.querySelectorAll('#current-year');
+    const currentYear = new Date().getFullYear();
+    yearElements.forEach(el => {
+        el.textContent = currentYear;
+    });
 });
 
 // Easter egg: Console message
