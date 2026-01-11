@@ -4038,6 +4038,19 @@ body {
     .hero-stats {
         flex-direction: column;
         gap: 20px;
+        align-items: flex-start;
+    }
+    
+    .hero-stats .stat {
+        align-items: flex-start;
+    }
+    
+    .hero-stats .stat-number {
+        text-align: left;
+    }
+    
+    .hero-stats .stat-label {
+        text-align: left;
     }
 
     .section-title {
