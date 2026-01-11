@@ -764,6 +764,13 @@ body {
     padding: 8px 4px;
 }
 
+/* 3-column grid for reduced vital signs */
+.vitals-grid-secondary.vitals-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 12px 8px;
+}
+
 /* Large gauge for Pain & Dyspnea */
 .vital-gauge-large {
     aspect-ratio: 1;
@@ -775,24 +782,24 @@ body {
 }
 
 .vital-gauge-small .vital-value {
-    font-size: 15px;
+    font-size: 24px;
     font-weight: 700;
     line-height: 1;
     color: #1e293b;
 }
 
 .vital-gauge-small .vital-label {
-    font-size: 7px;
+    font-size: 10px;
     font-weight: 600;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    margin-top: 2px;
+    margin-top: 4px;
     color: #64748b;
 }
 
 .vital-gauge-small .vital-value-display {
     position: absolute;
-    top: 70%;
+    top: 68%;
     left: 50%;
     transform: translate(-50%, -50%) !important;
 }
@@ -883,12 +890,12 @@ body {
     }
     
     .vital-gauge-small .vital-value {
-        font-size: 14px;
+        font-size: 20px;
         color: #1e293b;
     }
     
     .vital-gauge-small .vital-label {
-        font-size: 6px;
+        font-size: 9px;
         color: #64748b;
     }
     
@@ -915,12 +922,12 @@ body {
     }
     
     .vital-gauge-small .vital-value {
-        font-size: 12px;
+        font-size: 18px;
         color: #1e293b;
     }
     
     .vital-gauge-small .vital-label {
-        font-size: 5px;
+        font-size: 8px;
         color: #64748b;
     }
     
@@ -1440,7 +1447,7 @@ body {
 
 .publications-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 28px;
 }
 
@@ -2905,6 +2912,26 @@ body {
     margin-bottom: 12px;
 }
 
+/* Footer Disclaimer Styling */
+.footer-disclaimer {
+    max-width: 500px;
+}
+
+.footer-disclaimer .footer-heading {
+    color: #f59e0b;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.footer-disclaimer .disclaimer-text {
+    font-size: 12px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 20px;
+}
+
 .footer-heading {
     font-size: 16px;
     font-weight: 700;
@@ -3864,12 +3891,12 @@ body {
     }
     
     .vital-gauge-small .vital-value {
-        font-size: 14px;
+        font-size: 16px;
         color: #1e293b;
     }
     
     .vital-gauge-small .vital-label {
-        font-size: 6px;
+        font-size: 7px;
         color: #64748b;
     }
     

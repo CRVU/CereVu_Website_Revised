@@ -261,7 +261,7 @@ class BrainSignalAnalyzer {
         this.tempGaugeCanvas = document.getElementById('tempGaugeCanvas');
         this.signalCanvas = document.getElementById('signalCanvas');
         
-        if (!this.painGaugeCanvas || !this.signalCanvas) return;
+        if (!this.painGaugeCanvas) return;
         
         // Primary gauge contexts
         this.painGaugeCtx = this.painGaugeCanvas.getContext('2d');
@@ -272,14 +272,16 @@ class BrainSignalAnalyzer {
         this.rrGaugeCtx = this.rrGaugeCanvas?.getContext('2d');
         this.rso2GaugeCtx = this.rso2GaugeCanvas?.getContext('2d');
         this.tempGaugeCtx = this.tempGaugeCanvas?.getContext('2d');
-        this.signalCtx = this.signalCanvas.getContext('2d');
+        this.signalCtx = this.signalCanvas?.getContext('2d');
         
         // Set canvas sizes for all gauges
         this.setupCanvasSizes();
         
-        // Signal canvas
-        this.signalCanvas.width = 700;
-        this.signalCanvas.height = 140;
+        // Signal canvas (if present)
+        if (this.signalCanvas) {
+            this.signalCanvas.width = 700;
+            this.signalCanvas.height = 140;
+        }
         
         // Real signal data from CereVu sensor
         this.realSignalData = null;
@@ -1202,7 +1204,9 @@ class BrainSignalAnalyzer {
         this.updateDisplayValues();
         
         // Draw everything
-        this.drawSignal();
+        if (this.signalCanvas) {
+            this.drawSignal();
+        }
         this.drawAllGauges();
         this.updateMetrics();
         

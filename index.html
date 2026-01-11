@@ -75,10 +75,10 @@
         <div class="container hero-container">
             <div class="hero-content">
                 <h1 class="hero-title">
-                    AI-driven <span class="highlight">wearable</span> sensor
+                    Objective measurement of <span class="highlight">pain</span> and <span class="highlight">dyspnea</span>
                 </h1>
                 <p class="hero-subtitle">
-                    For enabling continuous monitoring of routine vital signs (heart rate, SpO₂, respiratory rate), body activity, and coughing dynamics, along with novel biomarkers for objective assessment of pain and dyspnea (air hunger).
+                    Powered by our novel AI-derived biomarkers from a wearable sensor array also capturing heart rate, respiratory rate, and SpO₂.
                 </p>
                 <div class="hero-stats">
                     <div class="stat">
@@ -105,11 +105,6 @@
                                 <img src="assets/CereVu-Medical_H-logo.png" alt="CereVu Medical" class="monitor-logo">
                             </div>
                             
-                            <!-- Waveform Display -->
-                            <div class="waveform-panel">
-                                <canvas id="signalCanvas" class="signal-canvas"></canvas>
-                            </div>
-                            
                             <!-- Primary Gauges - Pain & Dyspnea (Large) -->
                             <div class="vitals-grid-primary">
                                 <!-- Pain -->
@@ -132,7 +127,7 @@
                             </div>
                             
                             <!-- Secondary Gauges - Vital Signs (Small) -->
-                            <div class="vitals-grid-secondary">
+                            <div class="vitals-grid-secondary vitals-grid-3">
                                 <!-- SpO₂ -->
                                 <div class="vital-gauge-container vital-gauge-small">
                                     <canvas id="spo2GaugeCanvas" class="vital-gauge-canvas"></canvas>
@@ -157,24 +152,6 @@
                                     <div class="vital-value-display">
                                         <div class="vital-value rr-value" id="rrValue">15</div>
                                         <div class="vital-label">RR</div>
-                                    </div>
-                                </div>
-                                
-                                <!-- rSO₂ (Regional Cerebral Oxygen) -->
-                                <div class="vital-gauge-container vital-gauge-small">
-                                    <canvas id="rso2GaugeCanvas" class="vital-gauge-canvas"></canvas>
-                                    <div class="vital-value-display">
-                                        <div class="vital-value rso2-value" id="rso2Value">68</div>
-                                        <div class="vital-label">rSO<sub>2</sub></div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Body Temperature -->
-                                <div class="vital-gauge-container vital-gauge-small">
-                                    <canvas id="tempGaugeCanvas" class="vital-gauge-canvas"></canvas>
-                                    <div class="vital-value-display">
-                                        <div class="vital-value temp-value" id="tempValue">98.1</div>
-                                        <div class="vital-label">Temp °F</div>
                                     </div>
                                 </div>
                             </div>
@@ -309,29 +286,6 @@
                         </div>
                     </a>
 
-                    <!-- Nature -->
-                    <a href="https://www.nature.com/articles/d41586-024-03003-2" target="_blank" rel="noopener noreferrer" class="publication-card publication-card-featured">
-                        <div class="publication-image">
-                            <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=600&h=400&fit=crop&crop=center" alt="Scientific research laboratory and medical innovation" loading="lazy">
-                            <div class="pub-image-overlay"></div>
-                            <span class="pub-badge">Featured</span>
-                            <span class="pub-year">2024</span>
-                        </div>
-                        <div class="publication-content">
-                            <div class="publication-meta">
-                                <span class="publication-journal">Nature</span>
-                                <span class="publication-type">News Feature</span>
-                            </div>
-                            <h5 class="publication-title">Featured Coverage in Nature Magazine</h5>
-                            <p class="publication-excerpt">CereVu's groundbreaking pain assessment technology highlighted in one of the world's most prestigious scientific publications.</p>
-                            <div class="publication-footer">
-                                <span class="read-article">Read Article</span>
-                                <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </a>
                 </div>
             </div>
         </div>
@@ -345,7 +299,7 @@
                 <p class="section-subtitle">Recent achievements and milestones</p>
             </div>
             <div class="news-grid">
-                <div class="news-card">
+                <a href="https://www.nature.com/articles/d41586-024-03003-2" target="_blank" rel="noopener noreferrer" class="news-card" style="text-decoration: none; color: inherit;">
                     <div class="news-badge">Featured</div>
                     <div class="news-icon">
                         <svg viewBox="0 0 24 24" fill="currentColor">
@@ -355,7 +309,7 @@
                     <h3 class="news-title">Featured in Nature Magazine</h3>
                     <p class="news-description">"How a 'pain-o-meter' could improve treatments" — Nature, September 2024</p>
                     <p class="news-date">September 2024</p>
-                </div>
+                </a>
                 <div class="news-card">
                     <div class="news-badge">Funding</div>
                     <div class="news-icon">
@@ -365,17 +319,6 @@
                     </div>
                     <h3 class="news-title">>$2M Grant Funding</h3>
                     <p class="news-description">Secured major funding from federal agencies including NSF and FDA to advance objective pain measurement technology</p>
-                    <p class="news-date">2024</p>
-                </div>
-                <div class="news-card">
-                    <div class="news-badge">Regulatory</div>
-                    <div class="news-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 00-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                        </svg>
-                    </div>
-                    <h3 class="news-title">FDA Pre-Submission Completed</h3>
-                    <p class="news-description">Successfully completed FDA Pre-submission meeting with Anesthesia/Respiratory Branch. De novo 510(k) pathway established</p>
                     <p class="news-date">2024</p>
                 </div>
             </div>
@@ -413,9 +356,9 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
-                    <h3 class="footer-title">CereVu</h3>
-                    <p class="footer-description">Objectively measuring pain in real-time with wearable sensor technology.</p>
+                <div class="footer-section footer-disclaimer">
+                    <h4 class="footer-heading">Investigational Use Only</h4>
+                    <p class="footer-description disclaimer-text">CereVu's technology is investigational and has not been cleared or approved by the U.S. Food and Drug Administration (FDA). The technology is intended for research and evaluation purposes only and is not currently intended for clinical diagnosis, treatment, or medical decision-making.</p>
                     <p class="footer-description">© <span id="current-year"></span> CereVu Medical. All rights reserved.</p>
                 </div>
                 <div class="footer-section">
